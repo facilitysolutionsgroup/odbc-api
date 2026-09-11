@@ -181,8 +181,11 @@ where
     }
 
     /// Create a VarChar box from a `Vec`.
-    pub fn from_vec(val: Vec<K::Element>) -> Self {
+    pub fn from_vec(mut val: Vec<K::Element>) -> Self {
         let indicator = Indicator::Length(val.len() * size_of::<K::Element>());
+        if val.is_empty() {
+            val.push(K::ZERO);
+        }
         let buffer = val.into_boxed_slice();
         Self::from_buffer(buffer, indicator)
     }
